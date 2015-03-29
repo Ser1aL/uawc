@@ -13,7 +13,7 @@ rvm use ruby-2.2.1@uawc --default --create
 
 mkdir /opt -p
 cd /opt
-git clone https://github.com/Ser1aL/uawc.git
+git clone https://github.com/Ser1aL/uawc
 cd uawc
 
 bundle install
