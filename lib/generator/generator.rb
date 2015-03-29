@@ -4,8 +4,16 @@ module Generator
   include Util::Tar
 
   SITEMAPS_PATH = 'public/sitemaps'
-  SITEMAP_URL_LIMIT = 1_000
+  SITEMAP_URL_LIMIT = 50_000
 
+  # == Generator#generate_sitemap_archive
+  #
+  # Receives the set of Parser::Url objects and generates sitemap files.
+  # If the number of urls exceeds the allowed number of 50K, breaks the file
+  # to few and creates the sitemap_index.xml.
+  #
+  # All output is generated in public/sitemaps/[dynamic_name] and then tarred and
+  # gzipped. The final name is changed to .rename due to Gmail file restrictions
   def generate_sitemap_archive(urls, origin_url)
     name_suffix = Digest::SHA2.hexdigest(Time.now.to_f.to_s)[0..2]
 
@@ -32,6 +40,10 @@ module Generator
     directory_name + '.rename'
   end
 
+  # == Generator#build_xml
+  #
+  # Build sitemap file based on gathered filtered urls
+  # Sitemap doc: http://www.sitemaps.org/protocol.html#xmlTagDefinitions
   def build_xml(urls, directory_name)
     filename = 'sitemap_' + Digest::SHA2.hexdigest(Time.now.to_f.to_s)[1..11] + '.xml'
     path = File.expand_path(File.join(SITEMAPS_PATH, directory_name, filename))
@@ -55,6 +67,11 @@ module Generator
     filename
   end
 
+  # == Generator#build_sitemap_xml
+  #
+  # Build sitemap index out of sitemap files
+  # Hardcode http://example.com as we are not owners of the victim domain
+  # Sitemap index doc: http://www.sitemaps.org/protocol.html#index
   def build_sitemap_index(sitemaps, directory_name)
     filename = 'sitemap_index.xml'
     path = File.expand_path(File.join(SITEMAPS_PATH, directory_name, filename))

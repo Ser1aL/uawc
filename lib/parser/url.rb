@@ -1,6 +1,6 @@
 module Parser
   class Url
-    EXTENSION_WHITELIST = %w[ade adp bat chm cmd
+    EXTENSION_BLACKLIST = %w[ade adp bat chm cmd
       com cpl css exe hta ins isp jse js lib lnk mde msc
       msp mst pif scr sct shb sys vb vbe vbs vxd wsc wsf
       wsh zip tar tgz taz z gz rar
@@ -9,7 +9,7 @@ module Parser
 
     attr_reader :href
 
-    def initialize(dom_object:, origin_uri:)
+    def initialize(dom_object:, origin_uri:) #:nodoc:
       begin
         @valid = false
         @href = URI.join(origin_uri, URI(dom_object.attributes['href'].to_s))
@@ -19,6 +19,12 @@ module Parser
       end
     end
 
+    # == Parser::Url#validate!
+    #
+    # Runs url validations. For url to be valid it should:
+    #  - not belong to a different domain
+    #  - have the same or different scheme based on parameters
+    #  - not end with one of blacklisted extensions
     def validate!(origin_uri, strict_scheme = false)
       @valid = true
 
@@ -34,7 +40,7 @@ module Parser
 
     private
 
-    def validate_origin(origin_uri, strict_scheme)
+    def validate_origin(origin_uri, strict_scheme) #:nodoc:
       return false unless valid?
 
       begin
@@ -50,19 +56,19 @@ module Parser
       end
     end
 
-    def validate_extension
+    def validate_extension #:nodoc:
       return false unless valid?
 
-      @valid = EXTENSION_WHITELIST.none? do |file_extension|
+      @valid = EXTENSION_BLACKLIST.none? do |file_extension|
         @href.path.to_s.end_with?(".#{file_extension.downcase}")
       end
     end
 
-    def remove_fragment!
+    def remove_fragment! #:nodoc:
       @href.fragment = nil
     end
 
-    def self.logger
+    def self.logger #:nodoc:
       @logger
     end
   end

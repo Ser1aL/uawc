@@ -8,7 +8,7 @@ module Parser
   class Page
     @logger = File.open('log/page_logger.log', 'a+')
 
-    def initialize(page_url, configuration = {})
+    def initialize(page_url, configuration = {}) #:nodoc:
       begin
         @page_uri = URI(page_url)
         @strict_scheme = configuration['strict_scheme_rule'].to_i == 1
@@ -18,10 +18,14 @@ module Parser
       @internal_links = []
     end
 
-    def links
+    def links #:nodoc:
       @internal_links
     end
 
+    # == Parser::Page#parse!
+    #
+    # Opens a request to remote resource, gets the contents and builds
+    # a set of valid Parser::Url objects
     def parse!
       page_contents = open_remote(@page_uri)
       return unless page_contents && page_contents.is_a?(Nokogiri::HTML::Document)
@@ -36,6 +40,10 @@ module Parser
 
     private
 
+    # == Parser::Page#open_remote
+    #
+    # Open remote resource and validate the response and contents
+    # Has a variety of different network exception handlers
     def open_remote(url)
       begin
         Page.logger.puts url
@@ -69,13 +77,17 @@ module Parser
       end
     end
 
+    # == Parser::Page#unique_push
+    #
+    # Unique aggregation of url objects. Makes sure that hrefs are unique
+    # HTTP and HTTPs urls with the same hostname and path are considered different links
     def unique_push(url_object)
       unless @internal_links.map(&:href).map(&:to_s).include?(url_object.href.to_s)
         @internal_links << url_object
       end
     end
 
-    def self.logger
+    def self.logger #:nodoc:
       @logger
     end
 

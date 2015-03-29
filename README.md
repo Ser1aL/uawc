@@ -1,2 +1,2 @@
 # uawc
-UA Web Challenge Application 
+UA Web Challenge Application

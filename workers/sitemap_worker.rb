@@ -8,6 +8,12 @@ class SitemapWorker
   MAX_DEEP_LEVEL = 1
 
   class << self
+
+    # == SitemapWorker#perform
+    #
+    # Root action of Resque process. Performs additional sanitization of input
+    # arguments, executes url aggregation, sitemap generation and sends email
+    # with result. The progress is stored in redis with :submission_key: as a key
     def perform(*args)
       start_time = Time.now.to_f
       @visited_links = []
@@ -33,6 +39,11 @@ class SitemapWorker
       }.to_json
     end
 
+    # == SitemapWorker#collect_urls
+    #
+    # Aggregates remote urls recursively. Every next call is wrapped into a
+    # separate thread. deep_level stands for current level urls. Never goes
+    # deeper than MAX_DEEP_LEVEL. Returns the set of Parser::Url objects
     def collect_urls(urls: [], source_url:, deep_level: 0, submission_key:)
       deep_level += 1
 
@@ -61,7 +72,7 @@ class SitemapWorker
       urls
     end
 
-    def email_file(gzfile, recipient)
+    def email_file(gzfile, recipient) #:nodoc:
       smtp_settings = {
         :address              => "smtp.gmail.com",
         :port                 => 587,
@@ -90,15 +101,19 @@ class SitemapWorker
       end
     end
 
+    # == SitemapWorker#already_visited?
+    #
+    # Validates if we have already visited the page not to run
+    # additional expensive HTTP requests
     def already_visited?(link)
       @visited_links.include?(link)
     end
 
-    def save_visit(link)
+    def save_visit(link) #:nodoc:
       @visited_links << link
     end
 
-    def unique_url_arrays_join(array_one, array_two)
+    def unique_url_arrays_join(array_one, array_two) #:nodoc:
       array_links = array_one.map(&:href).map(&:to_s)
 
       array_one += array_two.select do |url_object|
@@ -106,7 +121,7 @@ class SitemapWorker
       end
     end
 
-    def application_redis
+    def application_redis #:nodoc:
       @redis ||= Redis.new(:host => "127.0.0.1", :port => 6379, :db => 1)
     end
 
