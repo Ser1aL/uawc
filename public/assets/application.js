@@ -49,7 +49,7 @@ $(document).ready(function(){
         else {
           $('.output').append(
             $('<a/>')
-              .html('Download archive')
+              .html('Download archive(rename to .tar.gz)')
               .attr('href', '/get_file/' + response['sitemap'])
               .addClass('btn')
               .addClass('btn-success')
