@@ -2,7 +2,7 @@
 .sass-cache
 .vagrant
 log/*.log
-tmp/puma
+tmp/puma/state
 public/sitemaps/*.gz
 public/sitemaps/*.rename
 public/sitemaps/*.xml

@@ -1,17 +1,21 @@
 #!/usr/bin/env bash
 
 apt-get update
-apt-get install -y curl
-
-apt-get install git gcc redis-server
-apt-get install zlib zlib-devel libyaml-devel libffi-devel openssl-devel
+apt-get install -y curl git gcc redis-server
 
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 curl -L https://get.rvm.io | bash -s stable
+source /usr/local/rvm/scripts/rvm
 
-rvm install ruby-2.1.1
+rvm install ruby-2.2.1
+rvm use ruby-2.2.1 --default
 
-mkdir /opt/uawc -p
-cd /opt/uawc
+mkdir /opt -p
+cd /opt
+git clone https://github.com/Ser1aL/uawc.git
+cd uawc
 
-# git clone
+bundle
+
+puma 2>&1 >/dev/null &
+QUEUE=sitemap_queue rake resque:work 2>&1 >/dev/null &
