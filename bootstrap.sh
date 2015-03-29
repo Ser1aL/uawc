@@ -16,7 +16,10 @@ cd /opt
 git clone https://github.com/Ser1aL/uawc.git
 cd uawc
 
-bundle
+bundle install
 
+echo 'Starting services'
 cd /opt/uawc && ./restart_server.sh
+echo 'Puma started!'
 cd /opt/uawc && ./restart_resque.sh
+echo 'Resque started!'
