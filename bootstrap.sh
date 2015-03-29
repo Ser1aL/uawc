@@ -18,5 +18,5 @@ cd uawc
 
 bundle
 
-/opt/uawc/restart-server.sh
-/optrestart-resque.sh
+cd /opt/uawc && ./restart_server.sh
+cd /opt/uawc && ./restart_resque.sh
