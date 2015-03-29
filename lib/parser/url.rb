@@ -12,7 +12,7 @@ module Parser
     def initialize(dom_object:, origin_uri:) #:nodoc:
       begin
         @valid = false
-        @href = URI.join(origin_uri, URI(dom_object.attributes['href'].to_s))
+        @href = URI.join(origin_uri, URI(dom_object.attributes['href'].to_s.downcase))
       rescue => exception
         Url.logger.puts exception.message
         return nil
