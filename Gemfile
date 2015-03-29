@@ -4,7 +4,7 @@ source 'http://rubygems.org'
 gem 'sinatra'
 gem 'sinatra-contrib'
 
-# url persistence
+# submission persistence
 gem 'redis'
 
 # front-end framework and support

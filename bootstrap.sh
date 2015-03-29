@@ -8,7 +8,7 @@ curl -L https://get.rvm.io | bash -s stable
 source /usr/local/rvm/scripts/rvm
 
 rvm install ruby-2.2.1
-rvm use ruby-2.2.1 --default
+rvm use ruby-2.2.1@uawc --default --create
 
 mkdir /opt -p
 cd /opt
@@ -17,5 +17,5 @@ cd uawc
 
 bundle
 
-puma 2>&1 >/dev/null &
-QUEUE=sitemap_queue rake resque:work 2>&1 >/dev/null &
+./restart-server
+./restart-resque
