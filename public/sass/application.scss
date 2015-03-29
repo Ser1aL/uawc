@@ -1,0 +1,40 @@
+@import "bootstrap_variables";
+@import "base";
+
+.top-margin-2 {
+  margin-top: 20px;
+}
+
+.top-margin-4 {
+  margin-top: 40px;
+}
+
+.output {
+  font-weight: bold;
+  line-height: 27px;
+  text-align: right;
+
+  &.error {
+    color: red;
+  }
+}
+
+.loader {
+  img {
+    width: 20px;
+    float: right;
+    margin-top: 7px;
+  }
+}
+
+.root-form{
+  label.right-aligned {
+    text-align: right;
+    line-height: 30px;
+  }
+
+  label.left-margin {
+    margin-left: 21px;
+  }
+
+}

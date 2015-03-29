@@ -1,0 +1,9 @@
+
+.sass-cache
+.vagrant
+log/*.log
+tmp/puma
+public/sitemaps/*.gz
+public/sitemaps/*.rename
+public/sitemaps/*.xml
+public/sitemaps/*.gzip

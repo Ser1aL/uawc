@@ -1,0 +1,24 @@
+!!!
+%html{:lang => 'en'}
+  %head
+    %meta{:charset => 'utf-8'}/
+    %meta{:content => 'IE=Edge,chrome=1', 'http-equiv' => 'X-UA-Compatible'}/
+    %meta{:content => 'width=device-width, initial-scale=1.0', :name => 'viewport'}/
+    %title UA Web Challenge
+    / Le HTML5 shim, for IE6-8 support of HTML elements
+    /[if lt IE 9]
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.1/html5shiv.js" type="text/javascript"></script>
+    %link{ rel: 'stylesheet', href: url('assets/application.css') }
+
+  %body
+    %nav.navbar.navbar-default{ role: 'navigation' }
+      .container-fluid
+        .navbar-header
+          %button{type: 'button', class: 'navbar-toggle collapsed', 'data-toggle' => 'collapse', 'data-target' => 'navbar-collapse'}
+            .sr-only
+              UA Web Challenge Application
+          %a{class: 'navbar-brand', href: '/'} UA Web Challenge Application
+
+    .container= yield
+    %script{ src: '//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'}
+    %script{ src: url('assets/application.js') }
